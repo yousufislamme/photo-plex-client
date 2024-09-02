@@ -1,8 +1,19 @@
+"use client";
 import React from "react";
 import { FcStackOfPhotos } from "react-icons/fc";
 import { IoMdPhotos } from "react-icons/io";
+import Link from "next/link";
+import { usePhotoContext } from "../Context/PhotoContext";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const { user, handleGoogleSign, handleSingOut } = usePhotoContext();
+  const { emailVerified, displayName, photoURL } = user;
+  const router = useRouter();
+
+  if (user.emailVerified == true) {
+    router.push("/"); // Redirecting to /cart route
+  }
   return (
     <div>
       <div className="navbar bg-transparent px-[10px] md:px-[50px] ">
@@ -14,7 +25,8 @@ const Navbar = () => {
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -25,20 +37,13 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
               <li>
                 <a>Item 1</a>
               </li>
               <li>
                 <a>Parent</a>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
               </li>
               <li>
                 <a>Item 3</a>
@@ -46,12 +51,12 @@ const Navbar = () => {
             </ul>
           </div>
 
-          <a className="btn btn-ghost text-xl">
+          <Link href={"/"} className="btn btn-ghost text-xl">
             <span>
               <IoMdPhotos className="text-3xl" />
             </span>
             Photo Plex{" "}
-          </a>
+          </Link>
         </div>
 
         <div className="hidden">
@@ -59,12 +64,14 @@ const Navbar = () => {
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost m-1 bg-base-300">
+              className="btn btn-ghost m-1 bg-base-300"
+            >
               Photos
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
               <li>
                 <a>Video</a>
               </li>
@@ -81,23 +88,7 @@ const Navbar = () => {
             />
           </div>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <details>
-                <summary>Explore</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
-          </ul>
-        </div>
+      
         <div className="navbar-end gap-4 ">
           <button className="btn btn-ghost btn-circle ">
             <div className="indicator">
@@ -106,7 +97,8 @@ const Navbar = () => {
                 className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -117,35 +109,45 @@ const Navbar = () => {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                />
+          {user.emailVerified === true ? (
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full">
+                  <img alt="" src={user.photoURL} />
+                </div>
               </div>
+              <ul
+                tabIndex={0}
+                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                  </a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                  <a href="" onClick={handleSingOut}>
+                    Logout
+                  </a>
+                </li>
+              </ul>
             </div>
-            <ul
-              tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-              <li>
-                <a className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
-              </li>
-            </ul>
-          </div>
+          ) : (
+            <ul className="menu menu-horizontal px-1 font-semibold text-md">
+           
+            <li>
+              <Link href={"/login"}>Login</Link>
+            </li>
+          </ul>
+          )}
 
           <div className="hidden md:block">
             <a className="btn bg-blue-600 text-white  ">Upload</a>

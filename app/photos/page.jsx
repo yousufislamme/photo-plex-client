@@ -1,6 +1,20 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import PhotoCard from "../components/PhotoCard";
+import { usePhotoContext } from "../Context/PhotoContext";
+import Skeleton from "../components/Skeleton";
 
 const Photos = () => {
+  const {
+    photos,
+    loading,
+    query,
+    setQuery,
+    fetchPhotos,
+    handleSearchSubmit,
+    handleSearchInputChange,
+  } = usePhotoContext();
+
   return (
     <div className=" px-10 py-8">
       <div className="flex justify-center">
@@ -9,7 +23,7 @@ const Photos = () => {
             <a>Photo</a>
           </li>
           <li>
-            <a>Item 2</a>
+            <button>Item 2</button>
           </li>
           <li>
             <a>Item 3</a>
@@ -34,33 +48,15 @@ const Photos = () => {
           </ul>
         </details>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 place-content-center  gap-8 py-8">
-        <div className="w-96">
-          <img
-            className="rounded-md h-[460px] w-auto md:h-[600px] "
-            src="https://images.pexels.com/photos/5109665/pexels-photo-5109665.jpeg"
-            alt=""
-          />
-        </div>
-        <div className="w-96 relative">
-          <img
-            className="rounded-md h-[460px] w-auto md:h-[600px] "
-            src="https://images.pexels.com/photos/20778681/pexels-photo-20778681/free-photo-of-a-black-and-white-photo-of-a-cathedral.jpeg"
-            alt=""
-          />
-          {/* <div className=" ">
-            <button className="btn btn-primary m-2  absolute   bottom-0  right-0 ">
-              Download{" "}
-            </button>
-          </div> */}
-        </div>
-        <div className="w-96">
-          <img
-            className="rounded-md h-[460px] w-auto md:h-[600px] "
-            src="https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg"
-            alt=""
-          />
-        </div>
+
+      {/* Loading indicator */}
+      {loading && <Skeleton />}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 place-content-center items-center  gap-8 py-8">
+        {/* <Skeleton /> */}
+        {photos.map((item) => (
+          <PhotoCard item={item} key={item.id} />
+        ))}
       </div>
     </div>
   );
